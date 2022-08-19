@@ -16,9 +16,23 @@ function myFunction() {
     let endTime = new Date();
     // ここでは予定の終わりの日時を始まりの日時 + 1時間に設定しています。
     new Date(endTime.setHours(endTime.getHours() + 1));
+
+    let descriptions = 'The Moon\n080-XXXX-XXXX';
     
-    // 上で定義した、タイトル、始まりと終わりの日時を使用して予定を登録
-    calendar.createEvent(title, startTime, endTime);
+    var events = calendar.getEvents(startTime, endTime);
+    console.log(events.length);
+
+    if(events.length == 0){
+      // 上で定義した、タイトル、始まりと終わりの日時を使用して予定を登録
+      //予定登録時に説明を記載することを追加
+      calendar.createEvent(title, startTime, endTime, {description: descriptions});
+      console.log('予約登録したよ～');
+    }
+
+    else{
+      console.log('もうすでに予約入ってるよ～');
+    }
+
   } catch (e) {
     console.log(`カレンダーIDが正しくありません : ${e}`);
   }
