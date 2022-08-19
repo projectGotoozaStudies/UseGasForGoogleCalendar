@@ -2,17 +2,24 @@ var ACCESS_TOKEN = 'XXX';
 
 function doPost(e) {
   var event = JSON.parse(e.postData.contents).events[0];
+
   // 応答トークン
   var replyToken = event.replyToken;
+
   // ユーザーからのメッセージ
   var userMessage = event.message.text;
+  
   // 応答メッセージ用のAPI URL
   var url = 'https://api.line.me/v2/bot/message/reply';
 
+  // メッセージ以外(スタンプや画像など)が送られてきた場合
   if (userMessage === undefined) {
-    // メッセージ以外(スタンプや画像など)が送られてきた場合
+    //カレンダー追加関数の変数呼び出し
+    let remessage = addCalendar();
+
+    //カレンダー追加関数実行
     addCalendar();
-    userMessage = 'とうろく～';
+    userMessage = remessage;
   }
 
   UrlFetchApp.fetch(url, {
@@ -31,38 +38,3 @@ function doPost(e) {
   });
   return ContentService.createTextOutput(JSON.stringify({'content': 'post ok'})).setMimeType(ContentService.MimeType.JSON);
 }
-
-function addCalendar() {
-  // 予定を登録するgmailアカウントのアドレスを定数idに代入
-  const id = "XXX@gmail.com"; // <-　予定を登録するGmailアカウントのアドレス
-
-  try {
-    // 上で定義したidからカレンダーを取得
-    let calendar = CalendarApp.getCalendarById(id);
-
-    // カレンダーに登録する予定のタイトル
-    let title = "予約　goto";
-    // 予定の始まりの日時
-    let startTime = new Date('YYYY/MM/DD hh:mm:ss');
-    // 予定の終わりの日時
-    let endTime = new Date('YYYY/MM/DD hh:mm:ss');
-    
-    var events = calendar.getEvents(startTime, endTime);
-    console.log(events.length);
-
-    if(events.length == 0){
-      // 上で定義した、タイトル、始まりと終わりの日時を使用して予定を登録
-      calendar.createEvent(title, startTime, endTime);
-      console.log('予約登録したよ～');
-    }
-
-    else{
-      console.log('もうすでに予約入ってるよ～');
-    }
-
-
-  } catch (e) {
-    console.log(`カレンダーIDが正しくありません : ${e}`);
-  }
-}
-
