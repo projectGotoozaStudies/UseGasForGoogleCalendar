@@ -8,9 +8,6 @@ function doPost(e) {
 
   // ユーザーからのメッセージ
   var userMessage = event.message.text;
-  
-  // 応答メッセージ用のAPI URL
-  var url = 'https://api.line.me/v2/bot/message/reply';
 
   // メッセージ以外(スタンプや画像など)が送られてきた場合
   if (userMessage === undefined) {
@@ -22,6 +19,13 @@ function doPost(e) {
     userMessage = remessage;
   }
 
+  sendMessage(replyToken, userMessage);
+}
+
+function sendMessage(replyToken, userMessage){
+  // 応答メッセージ用のAPI URL
+  var url = 'https://api.line.me/v2/bot/message/reply';
+  
   UrlFetchApp.fetch(url, {
     'headers': {
       'Content-Type': 'application/json; charset=UTF-8',
