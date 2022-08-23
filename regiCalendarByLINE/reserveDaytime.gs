@@ -78,7 +78,24 @@ function reserveDaytimeSendMessage(replyToken, userMessage){
       "messages": [{
         "type": "text",
         "text": userMessage,
-
+        'quickReply': {
+        'items': [{
+          'type': 'action',
+            'action': {
+              'type': 'message',
+              'label': 'はい',
+              "text": '> はい',
+            }
+          },
+          {
+            'type': 'action',
+            'action': {
+              'type': 'message',
+              'label': 'いいえ',
+              "text": '> いいえ',
+            }
+          }
+        ]}
       }]
     })
   });
