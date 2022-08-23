@@ -23,7 +23,23 @@ function doPost(e) {
 
   if (userMessage === '予約') {
     userMessage = "予約日を選択してください\n選択した時間から２時間が予約時間となります";
-    sendMessage(replyToken, userMessage);
+    reserveDaytime(replyToken, userMessage);
+  }
+
+  else if (/^(19|2[0-1]):(00|30)$/.test(userMessage) === true){ //正規表現で時間指定したい 要修正
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = today.getMonth()+1;
+    var date = today.getDate();
+    dateT = ["日","月","火","水","木","金","土"];
+    var day = dateT[today.getDay()];
+
+    var newToday = year + "年" + month + "月" + date + "日" + "(" + day + ")" + " " + userMessage; //今の年月日と選択した時間を合成
+    var pTime = Number(userMessage.slice(0, 2)) + 2; //入力した時間の時間部分を抽出
+    var min = userMessage.slice(-2); //入力した時間の分部分を抽出
+
+    userMessage = newToday + " ～ " + pTime + ":" + min + " で予約時間を設定します\nよろしければ 「はい」 を選択してください";
+    reserveDaytimeSendMessage(replyToken, userMessage);
   }
 
   else if (userMessage === 'アクセス'){
@@ -37,9 +53,10 @@ function doPost(e) {
   }
 
   else{
+    userMessage = "入力の値が不正です";
     sendMessage(replyToken, userMessage);
   }
-tentService.createTextOutput(JSON.stringify({'content': 'post ok'})).setMimeType(ContentService.MimeType.JSON);
+
 }
 
 function sendMessage(replyToken, userMessage){  
