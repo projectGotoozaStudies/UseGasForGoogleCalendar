@@ -1,4 +1,4 @@
-var ACCESS_TOKEN = 'IfhVPQfS0Det/0pRZpSlW/zUDxVT7TuD6dzBNmPWLmCjUEVrC7055P7Rxs1MnItoT4lWi/z5mEfJoTAphhW0mcMGWYSesJb9ZgtrxVyNQJ/yw03kgHNYt9KUE+BHT3QDZwkmegBBoZnRe4PCm7cH4wdB04t89/1O/w1cDnyilFU=';
+var ACCESS_TOKEN = 'XXX';
 
 var pTime = 0;  //プラスタイム変数
 var min = "";  //入力分(ふん)部分格納変数
@@ -52,18 +52,6 @@ function doPost(e) {  //ユーザがmessageを送る度に呼ばれる関数 ボ
     reserveMember(replyToken, userMessage);
   }
 
-  else if (userMessage === '日時問題あり'){
-    userMessage = "最初からやり直してください";
-    sendMessage(replyToken, userMessage);
-  }
-
-  else if(/^([1-4]人)$/.test(userMessage) === true){ //正規表現で人数指定を制限
-    remessage = checkCalendar(userMessage);
-    checkCalendar();
-    userMessage = remessage;
-    sendMessage(replyToken, userMessage);
-  }
-
   else if (userMessage === 'アクセス'){
     userMessage  = "https://goo.gl/maps/1rnJMrj9BZ8zkcPD8";
     sendMessage(replyToken, userMessage);
@@ -72,6 +60,11 @@ function doPost(e) {  //ユーザがmessageを送る度に呼ばれる関数 ボ
     userMessage  = "https://www.bar-riberty.com/";
     sendMessage(replyToken, userMessage);
   }
+  else{
+    userMessage = "入力の値が不正です";
+    sendMessage(replyToken, userMessage);
+  }
+
 }
 
 function sendMessage(replyToken, userMessage){  
