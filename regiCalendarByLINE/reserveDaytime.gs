@@ -84,7 +84,7 @@ function reserveDaytimeSendMessage(replyToken, userMessage){
             'action': {
               'type': 'message',
               'label': 'はい',
-              "text": '> はい',
+              "text": '日時問題なし',
             }
           },
           {
@@ -92,7 +92,7 @@ function reserveDaytimeSendMessage(replyToken, userMessage){
             'action': {
               'type': 'message',
               'label': 'いいえ',
-              "text": '> いいえ',
+              "text": '日時問題あり',
             }
           }
         ]}
