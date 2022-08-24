@@ -1,8 +1,13 @@
 var ACCESS_TOKEN = 'XXX';
 
+var pTime = 0;  //プラスタイム変数
+var min = "";  //入力分(ふん)部分格納変数
+
+let remessage;
+
 // 応答メッセージ用のAPI URL
 var url = 'https://api.line.me/v2/bot/message/reply';
-function doPost(e) {
+function doPost(e) {  //ユーザがmessageを送る度に呼ばれる関数 ボタンなどで指定いた場合で送信しても同様
   var event = JSON.parse(e.postData.contents).events[0];
 
   // 応答トークン
@@ -14,7 +19,7 @@ function doPost(e) {
   // メッセージ以外(スタンプや画像など)が送られてきた場合
   if (userMessage === undefined) {
     //カレンダー追加関数の変数呼び出し
-    let remessage = addCalendar();
+    remessage = addCalendar();
 
     //カレンダー追加関数実行
     addCalendar();
@@ -26,7 +31,7 @@ function doPost(e) {
     reserveDaytime(replyToken, userMessage);
   }
 
-  else if (/^(19|2[0-1]):(00|30)$/.test(userMessage) === true){ //正規表現で時間指定したい 要修正
+  else if (/^(19|2[0-1]):(00|30)$/.test(userMessage) === true){ //正規表現で時間指定を制限中
     var today = new Date();
     var year = today.getFullYear();
     var month = today.getMonth()+1;
@@ -35,23 +40,26 @@ function doPost(e) {
     var day = dateT[today.getDay()];
 
     var newToday = year + "年" + month + "月" + date + "日" + "(" + day + ")" + " " + userMessage; //今の年月日と選択した時間を合成
-    var pTime = Number(userMessage.slice(0, 2)) + 2; //入力した時間の時間部分を抽出
-    var min = userMessage.slice(-2); //入力した時間の分部分を抽出
+    pTime = Number(userMessage.slice(0, 2)) + 2; //入力した時間の時間部分を抽出
+    min = userMessage.slice(-2); //入力した時間の分部分を抽出
 
     userMessage = newToday + " ～ " + pTime + ":" + min + " で予約時間を設定します\nよろしければ 「はい」 を選択してください";
     reserveDaytimeSendMessage(replyToken, userMessage);
+  }
+
+  else if (userMessage === '日時問題なし'){
+    userMessage = "人数をお選びください";
+    reserveMember(replyToken, userMessage);
   }
 
   else if (userMessage === 'アクセス'){
     userMessage  = "https://goo.gl/maps/1rnJMrj9BZ8zkcPD8";
     sendMessage(replyToken, userMessage);
   }
-
   else if (userMessage === 'ホームページ'){
     userMessage  = "https://www.bar-riberty.com/";
     sendMessage(replyToken, userMessage);
   }
-
   else{
     userMessage = "入力の値が不正です";
     sendMessage(replyToken, userMessage);
